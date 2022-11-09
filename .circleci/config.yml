@@ -1,6 +1,20 @@
 version: 2.1
 orbs:
   android: circleci/android@2.1.2
+machine:
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
+    JAVA6_HOME: /usr/lib/jvm/java-6-openjdk-amd64
+  java:
+    version: openjdk8
+dependencies:
+  override:
+    - echo y | sudo apt-get update
+    - echo y | sudo apt-get install libpango-1.0-0
+    - echo y | sudo apt-get install openjdk-6-jre
+
+    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+    - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 jobs:
   build:
     working_directory: ~/repo
