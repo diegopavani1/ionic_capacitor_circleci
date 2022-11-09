@@ -39,7 +39,7 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: cimg/node:19.0
-      - image: circleci/jdk:8u202-jdk
+      - image: cimg/openjdk:19.0.1
         environment:
           JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
     steps:
