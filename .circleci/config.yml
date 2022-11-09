@@ -50,6 +50,7 @@ jobs:
           name: install android sdk
           command: |
             sudo apt install android-sdk
+            export ANDROID_HOME=/usr/lib/android-sdk
       - run:
           name: accept licenses
           command: |
