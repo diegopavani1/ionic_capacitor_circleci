@@ -12,7 +12,7 @@ dependencies:
     - sudo apt-get -y install oracle-java9-installer
     - sudo apt-get install oracle-java9-set-default
 jobs:
-  build-android:
+  build:
     working_directory: ~/repo
     docker:
       - image: cimg/node:19.0
