@@ -1,0 +1,2 @@
+json_key_file("api-7434906498489936725-785500-8147943c4100.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("io.ionic.starter") # e.g. com.krausefx.app

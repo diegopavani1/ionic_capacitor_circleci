@@ -1,85 +1,50 @@
-version: 2
-workflows:
-  version: 2
-  build-test-and-deploy:
-    jobs:
-      - build_yarn
-      - build_android:
-          requires:
-            - build_yarn
-
+version: 2.1
+orbs:
+  android: circleci/android@2.1.2
 jobs:
-  build_yarn:
+  buildIonic:
+    working_directory: ~/repo
     docker:
-      - image: circleci/node:16-browsers
+      - image: cimg/node:19.0
     steps:
       - checkout
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@8.19"
       - restore_cache:
-          name: Restore Node Modules Cache
-          keys:
-            - yarn-modules-{{ checksum "yarn.lock" }}
-      - run: ls node_modules || yarn install --frozen-lockfile
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-packages
+          command: npm install
+      - run:
+          name: install ionic cli
+          command: "sudo npm install -g @ionic/cli"
       - save_cache:
-          name: Save Node Modules Cache
-          key: yarn-modules-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - node_modules
-      - run: yarn build
-      # - run: npx cap add android
-      - run: sudo npm install -g @ionic/cli
-      - run: sudo npm install -g @capacitor/cli
-      - run: ionic build --prod
-      - run: npx cap sync
-      - persist_to_workspace:
-          root: android
-          paths:
-            - ./*
-  build_android:
-    docker:
-      - image: circleci/android:api-29-node
-    environment:
-      JVM_OPTS: -Xmx3200m
-    steps:
-      - checkout
-      - attach_workspace:
-          at: android
-      - restore_cache:
-          name: Restore Node Modules Cache
-          keys:
-            - yarn-modules-{{ checksum "yarn.lock" }}
-      - restore_cache:
-          key: jars-{{ checksum "android/build.gradle" }}-{{ checksum  "android/build.gradle" }}
+            - ./node_modules
       - run:
-          name: Chmod permissions
-          command: sudo chmod +x ./android/gradlew
+          name: build
+          command: ionic build --prod
       - run:
-          name: Download Dependencies
-          command: cd android && ./gradlew androidDependencies --debug
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "android/build.gradle" }}-{{ checksum  "android/build.gradle" }}
-      - run:
-          name: Build debug APK and release APK
-          command: |
-            cd android
-            ./gradlew :app:assembleDebug
-            # ./gradlew :app:assembleRelease
-            # ./gradlew :app:assembleDebugAndroidTest
-      - run:
-          name: Run Tests
-          command: cd android && ./gradlew lint test
-      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: android/app/build/reports
-          destination: reports
-      - store_artifacts:
-          path: android/app/build/outputs/apk
-      - store_artifacts:
-          path: android/app/build/outputs/aab
-      #     path: android/app/src/main/assets/public
-      - store_test_results:
-          path: android/app/build/test-results
-      - persist_to_workspace:
-          root: android/app/build/outputs
-          paths:
-            - ./apk/*
+          name: sync capacitor
+          command: npx cap sync
+    fastLaneAndroid:
+      working_directory: ~/repo
+      docker:
+        - image: cimg/android:2022.09
+      steps:
+        - checkout
+        - run:
+            name: install ruby
+            command: "sudo apt-get install ruby-full"
+        - run:
+            name: install fastlane
+            command: |
+              source "https://rubygems.org"
+              gem "fastlane"
+        - run:
+            name: build fastlane android
+            command: |
+              cd android
+              fastlane beta
