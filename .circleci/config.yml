@@ -55,5 +55,6 @@ jobs:
               fastlane -v
         - run:
             name: build fastlane android
+            path: android
             command: |
-              ./android/fastlane beta
+              fastlane beta
