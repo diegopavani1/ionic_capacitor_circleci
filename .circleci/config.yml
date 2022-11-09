@@ -15,7 +15,7 @@ jobs:
           name: install-packages
           command: npm install
       - run:
-          name: update-npm
+          name: install ionic cli
           command: "sudo npm install -g @ionic/cli"
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
@@ -23,10 +23,10 @@ jobs:
             - ./node_modules
       - run:
           name: build
-          command: ionic capacitor build
+          command: ionic build --prod
       - run:
-          name: sync
+          name: sync capacitor
           command: npx cap sync
       - run:
-          name: sync
-          command: npx cap sync
+          name: build android
+          command: ionic capacitor build android
