@@ -1,11 +1,11 @@
 version: 2.1
+orbs:
+  android: "2.1.2"
 jobs:
   build:
     working_directory: ~/repo
     docker:
       - image: cimg/node:19.0
-    orbs:
-      android: "2.1.2"
     steps:
       - checkout
       - run:
