@@ -56,5 +56,4 @@ jobs:
         - run:
             name: build fastlane android
             command: |
-              cd android
-              fastlane beta
+              ./android/fastlane beta
