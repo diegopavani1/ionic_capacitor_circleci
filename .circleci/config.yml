@@ -58,10 +58,13 @@ jobs:
         - run:
             name: install fastlane
             command: |
-              sudo apt-get install build-essential
-              sudo gem install google-api-client
               sudo gem install fastlane -NV
               fastlane -v
+        - run:
+            name: install depedencies
+            path: android
+            command: |
+              ./gradlew androidDependencies --debug
         - run:
             name: build fastlane android
             path: android
