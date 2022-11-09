@@ -37,6 +37,9 @@ jobs:
       - run:
           name: sync capacitor
           command: npx cap sync
+      - run:
+          name: build android
+          command: ionic capacitor build android
   build_android:
       working_directory: ~/repo
       docker:
