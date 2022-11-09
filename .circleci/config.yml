@@ -47,6 +47,10 @@ jobs:
                 java -version
                 sudo apt install default-jdk
       - run:
+          name: install android sdk
+          command: |
+            sudo apt install android-sdk
+      - run:
           name: build android
           path: ./android
           command: ./gradlew assembleDebug
