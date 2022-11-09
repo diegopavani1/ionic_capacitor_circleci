@@ -22,7 +22,7 @@ jobs:
   build_android:
       working_directory: ~/repo
       docker:
-        - image: cimg/android:2022.09-cli-node
+        - image: cimg/android:2022.09-node
       steps:
         - checkout
         - run:
