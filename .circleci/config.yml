@@ -1,20 +1,39 @@
 version: 2.1
 orbs:
   android: circleci/android@2.1.2
-machine:
-  environment:
-    ANDROID_HOME: /usr/local/android-sdk-linux
-    JAVA6_HOME: /usr/lib/jvm/java-6-openjdk-amd64
-  java:
-    version: openjdk8
-dependencies:
-  override:
-    - echo y | sudo apt-get update
-    - echo y | sudo apt-get install libpango-1.0-0
-    - echo y | sudo apt-get install openjdk-6-jre
+_run:
+  jceinstall: &jceinstall
+    name: "Download JCE unlimited strength policy to allow the 256 bit keys"
+    command: |
+      curl -L --cookie 'oraclelicense=accept-securebackup-cookie;'  http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip -o /tmp/jce_policy.zip
+      unzip -o /tmp/jce_policy.zip -d /tmp
+      sudo mv -f /tmp/UnlimitedJCEPolicyJDK8/US_export_policy.jar $JAVA_HOME/jre/lib/security/US_export_policy.jar
+      sudo mv -f /tmp/UnlimitedJCEPolicyJDK8/local_policy.jar $JAVA_HOME/jre/lib/security/local_policy.jar
+  javaversion: &javaversion
+    name: "Report Java JDK Version being used"
+    command: |
+      echo ${JAVA_HOME}
+  restorecache: &restorecache
+    name: "Download and Cache Dependencies"
+    keys:
+      - v1-dependencies-{{ checksum "pom.xml" }}
+      # fallback to using the latest cache if no exact match is found
+      - v1-dependencies-
 
-    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
-    - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+  installjava14: &installjava14
+    name: "Download and install Java 14 from source OpenJDK"
+    command: |
+      JDK14_URL=https://download.java.net/java/GA/jdk14/076bab302c7b4508975440c56f6cc26a/36/GPL/openjdk-14_linux-x64_bin.tar.gz
+      wget $JDK14_URL -O /tmp/openjdk14.tar.gz
+      tar -xvzf /tmp/openjdk14.tar.gz
+      sudo mv jdk-14/ /usr/lib/jvm/
+  installjava15: &installjava15
+    name: "Download and install Java 15 from source OpenJDK"
+    command: |
+      JDK15_URL=$(curl -s https://jdk.java.net/15/ | egrep -o "https://download.java.net/java/GA/jdk15.*?/.*?linux-x64.*?tar.gz" | head -1)
+      wget $JDK15_URL -O /tmp/openjdk15.tar.gz
+      tar -xvzf /tmp/openjdk15.tar.gz
+      sudo mv jdk-15.0.1/ /usr/lib/jvm/
 jobs:
   build:
     working_directory: ~/repo
