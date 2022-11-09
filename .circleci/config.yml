@@ -52,7 +52,6 @@ jobs:
             sudo apt install android-sdk
       - run:
           name: accept licenses
-          path:
           command: |
             yes | ~/Android/Sdk/tools/bin/sdkmanager --licenses
       - run:
