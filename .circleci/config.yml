@@ -45,12 +45,14 @@ jobs:
         - checkout
         - run:
             name: install ruby
-            command: "sudo apt-get install ruby-full"
+            command: sudo apt-get install ruby-full
         - run:
             name: install fastlane
             command: |
-              source "https://rubygems.org"
-              gem "fastlane"
+              sudo apt-get install build-essential
+              sudo gem install google-api-client
+              sudo gem install fastlane -NV
+              fastlane -v
         - run:
             name: build fastlane android
             command: |
