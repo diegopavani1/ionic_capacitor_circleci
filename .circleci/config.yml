@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   android: circleci/android@2.1.2
 jobs:
-  build_ionic:
+  build-ionic:
     working_directory: ~/repo
     docker:
       - image: cimg/node:19.0
@@ -29,7 +29,7 @@ jobs:
       - run:
           name: sync capacitor
           command: npx cap sync
-    build_android_beta:
+    build-android-beta:
       working_directory: ~/repo
       docker:
         - image: cimg/android:2022.09
