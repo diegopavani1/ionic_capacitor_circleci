@@ -56,10 +56,11 @@ jobs:
           command: |
             sudo apt install android-sdk-build-tools
             sudo apt install android-sdk-platform-tools
+            sudo apt install android-sdk-manager
       - run:
           name: accept licenses
           command: |
-            yes |  skdmanager --licenses
+            yes |  ~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
       - run:
           name: build android
           path: ./android
