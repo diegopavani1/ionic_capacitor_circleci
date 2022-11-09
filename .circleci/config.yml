@@ -64,8 +64,7 @@ jobs:
       - run:
           name: accept licenses
           command: |
-            ls /usr/lib/android-sdk/tools/bin
-            yes | /usr/lib/android-sdk/tools/bin/sdkmanager skdmanager --licenses
+            yes |  skdmanager --licenses
       - run:
           name: build android
           path: ./android
