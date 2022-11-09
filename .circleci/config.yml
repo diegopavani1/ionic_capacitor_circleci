@@ -56,7 +56,6 @@ jobs:
           command: |
             sudo apt install android-sdk-build-tools
             sudo apt install android-sdk-platform-tools
-            sudo apt install android-sdk-manager
       - run:
           name: accept licenses
           command: |
