@@ -50,6 +50,8 @@ jobs:
           name: install android sdk
           command: |
             sudo apt install android-sdk
+          environment:
+            ANDROID_HOME: /usr/lib/android-sdk
       - run:
           name: build android
           path: ./android
