@@ -31,4 +31,4 @@ jobs:
           command: npx cap sync
       - run:
           name: build android
-          command: ionic capacitor build android
+          command: gradlew assembleDebug
