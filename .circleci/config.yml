@@ -12,7 +12,7 @@ dependencies:
     - sudo apt-get -y install oracle-java9-installer
     - sudo apt-get install oracle-java9-set-default
 jobs:
-  build:
+  build-android:
     working_directory: ~/repo
     docker:
       - image: cimg/node:19.0
@@ -50,6 +50,10 @@ jobs:
           name: install android sdk
           command: |
             sudo apt install android-sdk
+      - run:
+          name: accept licenses
+          command: |
+            yes | sdkmanager --licenses
       - run:
           name: build android
           path: ./android
