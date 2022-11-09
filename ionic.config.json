@@ -1,0 +1,7 @@
+{
+  "name": "test-cicd",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
