@@ -59,7 +59,7 @@ jobs:
       - run:
           name: accept licenses
           command: |
-            yes |  ~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+            yes | sdkmanager --licenses
       - run:
           name: build android
           path: ./android
