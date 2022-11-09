@@ -23,10 +23,11 @@ jobs:
       working_directory: ~/repo
       docker:
         - image: cimg/android:2022.09
+        - image: cimg/node:19.0
       steps:
         - checkout
         - run:
-            name: update-npm
+            name: install node
             command: sudo apt install nodejs
         - run:
             name: update-npm
