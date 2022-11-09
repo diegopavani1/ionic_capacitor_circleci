@@ -43,7 +43,6 @@ jobs:
           name: install java
           command: |
                 sudo apt-get update
-                java -version
                 sudo apt install default-jre
                 java -version
       - run:
