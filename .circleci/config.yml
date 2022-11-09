@@ -4,6 +4,8 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: cimg/node:19.0
+    orbs:
+      android: "2.1.2"
     steps:
       - checkout
       - run:
