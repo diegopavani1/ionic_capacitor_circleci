@@ -1,4 +1,12 @@
 version: 2.1
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - build_ionic
+      - build_android:
+          requires:
+            - build_ionic
 orbs:
   android: circleci/android@2.1.2
 jobs:
