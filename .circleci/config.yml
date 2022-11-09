@@ -8,7 +8,7 @@ jobs:
       - image: cimg/node:19.0
     steps:
       - checkout
-          - android/create-avd:
+      - android/create-avd:
           avd-name: myavd
           install: true
           system-image: system-images;android-29;default;x86
