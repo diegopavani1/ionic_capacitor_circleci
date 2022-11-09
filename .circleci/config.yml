@@ -54,5 +54,5 @@ jobs:
           name: build android
           path: ./android
           command: ./gradlew assembleDebug
-  environment:
-    ANDROID_HOME: /usr/lib/android-sdk
+    environment:
+      ANDROID_HOME: /usr/lib/android-sdk
