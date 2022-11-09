@@ -56,7 +56,6 @@ jobs:
           command: |
             sudo apt install android-sdk-build-tools
             sudo apt install android-sdk-platform-tools
-            sudo mkdir ~/Android/Sdk/tools/bin
             ln -s ~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager ~/Android/Sdk/tools/bin/sdkmanager
       - run:
           name: accept licenses
