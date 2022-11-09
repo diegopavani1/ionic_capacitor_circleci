@@ -31,4 +31,4 @@ jobs:
           command: npx cap sync
       - run:
           name: build android
-          command: gradlew assembleDebug
+          command: ./gradlew assembleDebug
