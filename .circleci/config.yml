@@ -40,6 +40,9 @@ jobs:
           name: sync capacitor
           command: npx cap sync
       - run:
+          name: show java home variable
+          command: ls -la /usr/lib/jvm/
+      - run:
           name: build android
           path: ./android
           command: ./gradlew assembleDebug
