@@ -1,45 +1,30 @@
-version: 2.1
-orbs:
-  android: circleci/android@2.1.2
+version: 2
 jobs:
   build:
-    working_directory: ~/repo
+    working_directory: ~/code
     docker:
-      - image: cimg/node:19.0
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
     steps:
       - checkout
-      - android/create-avd:
-          avd-name: myavd
-          install: true
-          system-image: system-images;android-29;default;x86
-            - android/start-emulator:
-                avd-name: myavd
-                no-window: true
-                restore-gradle-cache-prefix: v1a
-            - android/run-tests
-            - android/save-gradle-cache:
-                cache-prefix: v1a
-      - run:
-          name: update-npm
-          command: "sudo npm install -g npm@8.19"
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      #      - run:
+      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+      #         command: sudo chmod +x ./gradlew
       - run:
-          name: install-packages
-          command: npm install
-      - run:
-          name: install ionic cli
-          command: "sudo npm install -g @ionic/cli"
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ./node_modules
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: build
-          command: ionic build --prod
-      - run:
-          name: sync capacitor
-          command: npx cap sync
-      - run:
-          name: build android
-          command: ionic capacitor build android
+          name: Run Tests
+          command: ./gradlew lint test
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
