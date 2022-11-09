@@ -25,7 +25,6 @@ platform :android do
   lane :beta do
     gradle(
       task: "bundle",
-      flavor: "WorldDomination",
       build_type: "Release"
     )
 
