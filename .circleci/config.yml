@@ -26,9 +26,6 @@ jobs:
       steps:
         - checkout
         - run:
-            name: install node
-            command: sudo apt install nodejs
-        - run:
             name: update-npm
             command: "sudo npm install -g npm@8.19"
         - restore_cache:
@@ -73,3 +70,5 @@ jobs:
             path: android
             command: |
               fastlane beta
+        - store_artifacts:
+            path: android/app/build/outputs/bundle
