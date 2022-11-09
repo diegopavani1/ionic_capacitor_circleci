@@ -52,6 +52,16 @@ jobs:
             sudo apt install android-sdk
             export ANDROID_HOME=/usr/lib/android-sdk
       - run:
+          name: install android build tools
+          command: |
+            wget https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip
+            unzip commandlinetools-linux-6609375_latest.zip -d cmdline-tools
+            mkdir --parents "$ANDROID_HOME/cmdline-tools/latest"
+            sudo mv cmdline-tools/* "$ANDROID_HOME/cmdline-tools/latest/"
+            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+            sudo apt install android-sdk-build-tools
+            sudo apt install android-sdk-platform-tools
+      - run:
           name: accept licenses
           command: |
             ls /usr/lib/android-sdk/tools/bin
