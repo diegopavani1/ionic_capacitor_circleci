@@ -40,12 +40,18 @@ jobs:
       - run:
           name: build android
           command: ionic capacitor build android
+      - run:
+          name: view files
+          command: ls ~/repo/android
   build_android:
       working_directory: ~/repo
       docker:
         - image: cimg/android:2022.09
       steps:
         - checkout
+        - run:
+            name: view files
+            command: ls ~/repo/android
         - run:
             name: install ruby
             command: sudo apt-get install ruby-full
