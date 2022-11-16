@@ -38,8 +38,12 @@ jobs:
           name: Build ionic capacitor app
           command: ionic capacitor build ios
       - run:
+          name: Install homebrew
+          command: |
+              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - run:
           name: Install ruby for fastlane
-          command: sudo apt-get install ruby-full
+          command: brew install ruby
       - run:
           name: Install fastlane
           command: |
