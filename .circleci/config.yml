@@ -10,6 +10,8 @@ orbs:
   android: circleci/android@2.1.2
 jobs:
   build_ios:
+    resource_class:
+      large
     working_directory: ~/repo
     macos:
       xcode: 14.0.0
@@ -52,8 +54,6 @@ jobs:
           path: ios
           command: |
             fastlane build_ios
-    resource_class:
-      large
   build_android:
     working_directory: ~/repo
     docker:
