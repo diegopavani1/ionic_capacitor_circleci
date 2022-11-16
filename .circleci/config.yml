@@ -49,7 +49,7 @@ jobs:
           name: Build ios app
           path: ios
           command: |
-            fastlane build_ios
+            fastlane ios build_ios
   build_android:
     working_directory: ~/repo
     docker:
@@ -97,6 +97,6 @@ jobs:
           name: Build android app
           path: android
           command: |
-            fastlane generate_bundle_release
+            fastlane android generate_bundle_release
       - store_artifacts:
           path: android/app/build/outputs/bundle
