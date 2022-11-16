@@ -16,44 +16,44 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm
+          name: Install NPM
           command: "sudo npm install -g npm@8.19"
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: install-packages
+          name: Install npm dependencies
           command: npm install
       - run:
-          name: install ionic cli
+          name: Install ionic cli
           command: "sudo npm install -g @ionic/cli"
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
       - run:
-          name: build
+          name: Build ionic app
           command: ionic build --prod
       - run:
-          name: sync capacitor
+          name: Sync capacitor
           command: npx cap sync
       - run:
-          name: build ios
+          name: Build ionic capacitor app
           command: ionic capacitor build ios
       - run:
-          name: install ruby
+          name: Install ruby for fastlane
           command: sudo apt-get install ruby-full
       - run:
-          name: install fastlane
+          name: Install fastlane
           command: |
             sudo gem install fastlane -NV
             fastlane -v
       - run:
-          name: build fastlane ios
+          name: Build ios app
           path: ios
           command: |
             fastlane build_ios
-      - store_artifacts:
-          path: android/app/build/outputs/bundle
+    resource_class:
+      large
   build_android:
     working_directory: ~/repo
     docker:
@@ -61,12 +61,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm
+          name: Install NPM
           command: "sudo npm install -g npm@8.19"
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: install-packages
+          name: Install npm dependencies
           command: npm install
       - run:
           name: install ionic cli
@@ -76,54 +76,31 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: build
+          name: Build ionic app
           command: ionic build --prod
       - run:
-          name: sync capacitor
+          name: Sync capacitor
           command: npx cap sync
       - run:
-          name: build android
+          name: Build android capacitor app
           command: ionic capacitor build android
       - run:
-          name: view files
-          command: ls ~/repo/android
-      - run:
-          name: install ruby
+          name: Install ruby for fastlane
           command: sudo apt-get install ruby-full
       - run:
-          name: install fastlane
+          name: Install fastlane
           command: |
             sudo gem install fastlane -NV
             fastlane -v
       - run:
-          name: install depedencies
+          name: Install android dependencies
           path: android
           command: |
             ./gradlew androidDependencies --debug
       - run:
-          name: build fastlane android
+          name: Build android app
           path: android
           command: |
-            fastlane beta
+            fastlane generate_bundle_release
       - store_artifacts:
           path: android/app/build/outputs/bundle
-#version: 2.1
-#workflows:
-#  version: 2.1
-#  build-and-deploy:
-#    jobs:
-#      - build_android:
-#          requires:
-#            - build_ionic
-#orbs:
-#  android: circleci/android@2.1.2
-#jobs:
-#  build_ionic:
-#    working_directory: ~/repo
-#    docker:
-#      - image: cimg/node:19.0
-#    steps:
-#      - checkout
-#      - run:
-#          name: view files
-#          command: ls ~/repo/android
