@@ -3,10 +3,11 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build_ios:
-      - build_android:
+      - build_ios
+      - build_android
 orbs:
   ios-fastlane: storytel/ios-fastlane@1.6.0
+  android: circleci/android@2.1.2
 jobs:
   build_ios:
     working_directory: ~/repo
