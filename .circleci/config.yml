@@ -12,7 +12,7 @@ jobs:
   build_ios:
     working_directory: ~/repo
     docker:
-      - image: cimg/xcode:12.5.1-node
+      - image: cimg/xcode:14-node
     steps:
       - checkout
       - run:
