@@ -11,8 +11,8 @@ orbs:
 jobs:
   build_ios:
     working_directory: ~/repo
-    docker:
-      - image: cimg/xcode:14-node
+    macos:
+      xcode: 14.0.0
     steps:
       - checkout
       - run:
