@@ -3,72 +3,127 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build_ionic
-      - build_android:
-          requires:
-            - build_ionic
+      - build_ios:
+      #- build_android:
 orbs:
-  android: circleci/android@2.1.2
+  ios-fastlane: storytel/ios-fastlane@1.6.0
 jobs:
-  build_ionic:
+  build_ios:
     working_directory: ~/repo
     docker:
-      - image: cimg/node:19.0
+      - image: cimg/xcode:12.5.1-node
     steps:
       - checkout
       - run:
-          name: view files
-          command: ls ~/repo/android
-  build_android:
-      working_directory: ~/repo
-      docker:
-        - image: cimg/android:2022.09-node
-      steps:
-        - checkout
-        - run:
-            name: update-npm
-            command: "sudo npm install -g npm@8.19"
-        - restore_cache:
-            key: dependency-cache-{{ checksum "package-lock.json" }}
-        - run:
-            name: install-packages
-            command: npm install
-        - run:
-            name: install ionic cli
-            command: "sudo npm install -g @ionic/cli"
-        - save_cache:
-            key: dependency-cache-{{ checksum "package-lock.json" }}
-            paths:
-              - ./node_modules
-        - run:
-            name: build
-            command: ionic build --prod
-        - run:
-            name: sync capacitor
-            command: npx cap sync
-        - run:
-            name: build android
-            command: ionic capacitor build android
-        - run:
-            name: view files
-            command: ls ~/repo/android
-        - run:
-            name: install ruby
-            command: sudo apt-get install ruby-full
-        - run:
-            name: install fastlane
-            command: |
-              sudo gem install fastlane -NV
-              fastlane -v
-        - run:
-            name: install depedencies
-            path: android
-            command: |
-              ./gradlew androidDependencies --debug
-        - run:
-            name: build fastlane android
-            path: android
-            command: |
-              fastlane beta
-        - store_artifacts:
-            path: android/app/build/outputs/bundle
+          name: update-npm
+          command: "sudo npm install -g npm@8.19"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-packages
+          command: npm install
+      - run:
+          name: install ionic cli
+          command: "sudo npm install -g @ionic/cli"
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: build
+          command: ionic build --prod
+      - run:
+          name: sync capacitor
+          command: npx cap sync
+      - run:
+          name: build ios
+          command: ionic capacitor build ios
+      - run:
+          name: install ruby
+          command: sudo apt-get install ruby-full
+      - run:
+          name: install fastlane
+          command: |
+            sudo gem install fastlane -NV
+            fastlane -v
+      - run:
+          name: build fastlane ios
+          path: ios
+          command: |
+            fastlane build_ios
+#      - store_artifacts:
+#          path: android/app/build/outputs/bundle
+#  build_android:
+#    working_directory: ~/repo
+#    docker:
+#      - image: cimg/android:2022.09-node
+#    steps:
+#      - checkout
+#      - run:
+#          name: update-npm
+#          command: "sudo npm install -g npm@8.19"
+#      - restore_cache:
+#          key: dependency-cache-{{ checksum "package-lock.json" }}
+#      - run:
+#          name: install-packages
+#          command: npm install
+#      - run:
+#          name: install ionic cli
+#          command: "sudo npm install -g @ionic/cli"
+#      - save_cache:
+#          key: dependency-cache-{{ checksum "package-lock.json" }}
+#          paths:
+#            - ./node_modules
+#      - run:
+#          name: build
+#          command: ionic build --prod
+#      - run:
+#          name: sync capacitor
+#          command: npx cap sync
+#      - run:
+#          name: build android
+#          command: ionic capacitor build android
+#      - run:
+#          name: view files
+#          command: ls ~/repo/android
+#      - run:
+#          name: install ruby
+#          command: sudo apt-get install ruby-full
+#      - run:
+#          name: install fastlane
+#          command: |
+#            sudo gem install fastlane -NV
+#            fastlane -v
+#      - run:
+#          name: install depedencies
+#          path: android
+#          command: |
+#            ./gradlew androidDependencies --debug
+#      - run:
+#          name: build fastlane android
+#          path: android
+#          command: |
+#            fastlane beta
+#      - store_artifacts:
+#          path: android/app/build/outputs/bundle
+#version: 2.1
+#workflows:
+#  version: 2.1
+#  build-and-deploy:
+#    jobs:
+#      - build_android:
+#          requires:
+#            - build_ionic
+#orbs:
+#  android: circleci/android@2.1.2
+#jobs:
+#  build_ionic:
+#    working_directory: ~/repo
+#    docker:
+#      - image: cimg/node:19.0
+#    steps:
+#      - checkout
+#      - run:
+#          name: view files
+#          command: ls ~/repo/android
+
