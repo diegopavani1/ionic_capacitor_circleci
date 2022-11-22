@@ -5,8 +5,6 @@ workflows:
     jobs:
       - cypress/run:
           name: cypress-run
-          requires:
-            - build
           record: true
           parallel: true
           group: 'cypress'
@@ -16,10 +14,10 @@ workflows:
           wait-on: 'http://localhost:4200'
       - build_ios:
           requires:
-            - cypress/run
+            - cypress-run
       - build_android:
             requires:
-            - cypress/run
+            - cypress-run
 orbs:
   ios-fastlane: storytel/ios-fastlane@1.6.0
   android: circleci/android@2.1.2
