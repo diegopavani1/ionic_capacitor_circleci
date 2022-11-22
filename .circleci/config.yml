@@ -3,12 +3,39 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build_ios
-      - build_android
+      - cypress/run:
+          name: cypress-run
+          requires:
+            - build
+          record: true
+          parallel: true
+          group: 'cypress'
+          spec: 'cypress/integration/**/*'
+          browser: 'chrome'
+          start: 'npm run start'
+          wait-on: 'http://localhost:4200'
+          wait-on-timeout: 300
+      - build_ios:
+          requires:
+            - cypress/run
+      - build_android:
+            requires:
+            - cypress/run
 orbs:
   ios-fastlane: storytel/ios-fastlane@1.6.0
   android: circleci/android@2.1.2
 jobs:
+  cypress/run:
+    docker:
+      - image: cypress/browsers:node18.16.1-chrome89-ff86
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Run Cypress
+          command: npm run cypress:run
   build_ios:
     working_directory: ~/repo
     macos:
