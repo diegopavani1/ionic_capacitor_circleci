@@ -24,6 +24,7 @@ workflows:
 orbs:
   ios-fastlane: storytel/ios-fastlane@1.6.0
   android: circleci/android@2.1.2
+  cypress: cypress-io/cypress@2.2.0
 jobs:
   cypress/run:
     docker:
